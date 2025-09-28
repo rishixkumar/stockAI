@@ -1,0 +1,139 @@
+.page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0b0b0f;
+  color: #e6e6eb;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6ee7ff, #7c3aed);
+}
+
+.brand-name {
+  letter-spacing: 0.2px;
+  font-weight: 600;
+}
+
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.hero-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  margin-top: 12px;
+  margin-bottom: 32px;
+  color: #b6b6bf;
+  font-weight: 400;
+}
+
+.ticker-form {
+  width: 100%;
+  max-width: 560px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 1px, 1px);
+  white-space: nowrap;
+  border: 0;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ticker-input {
+  flex: 1;
+  appearance: none;
+  background: #0f0f14;
+  border: 1px solid #1e1e26;
+  border-radius: 12px;
+  color: #f2f2f7;
+  padding: 14px 16px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.ticker-input::placeholder {
+  color: #7a7a86;
+}
+
+.ticker-input:focus {
+  border-color: #6ee7ff;
+  box-shadow: 0 0 0 4px rgba(110, 231, 255, 0.15);
+  background: #101017;
+}
+
+.submit-btn {
+  appearance: none;
+  background: linear-gradient(135deg, #6ee7ff, #7c3aed);
+  color: #0b0b0f;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 80ms ease, filter 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.25);
+}
+
+.submit-btn:hover {
+  filter: brightness(1.05);
+}
+
+.submit-btn:active {
+  transform: translateY(1px);
+}
+
+.hint {
+  margin-top: 10px;
+  color: #81818f;
+  font-size: 14px;
+}
+
+.footer {
+  padding: 16px 24px;
+  color: #6a6a75;
+  font-size: 14px;
+  text-align: center;
+  border-top: 1px solid #12121a;
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 32px;
+  }
+}
