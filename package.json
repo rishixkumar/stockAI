@@ -10,13 +10,20 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "express": "^4.19.2",
+    "dotenv": "^16.4.5",
+    "cors": "^2.8.5",
+    "node-fetch": "^2.6.9",
+    "concurrently": "^9.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HOST=localhost DANGEROUSLY_DISABLE_HOST_CHECK=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server/index.js",
+    "dev": "concurrently -n server,client -c blue,green \"npm:server\" \"npm:start\""
   },
   "eslintConfig": {
     "extends": [
@@ -35,5 +42,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:4000"
 }

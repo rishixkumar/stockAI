@@ -124,12 +124,106 @@
   font-size: 14px;
 }
 
+.link-btn {
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: #9aa0a6;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .footer {
   padding: 16px 24px;
   color: #6a6a75;
   font-size: 14px;
   text-align: center;
   border-top: 1px solid #12121a;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 50;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 720px;
+  background: #0e0e14;
+  border: 1px solid #1b1b24;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #15151e;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-close {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: #9aa0a6;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 18px;
+}
+
+.modal-text {
+  margin: 0;
+  color: #d7d7de;
+  line-height: 1.6;
+}
+
+.error-text {
+  color: #ff7b7b;
+}
+
+.spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(110, 231, 255, 0.2);
+  border-top-color: #6ee7ff;
+  animation: spin 800ms linear infinite;
+}
+
+.spinner-text {
+  color: #a7a7b3;
+  font-size: 14px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 480px) {
