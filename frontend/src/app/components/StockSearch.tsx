@@ -19,13 +19,26 @@ interface StockData {
   interval: string;
   candlesticks: CandlestickData[];
   count: number;
+  requested_count?: number;
+}
+
+interface AllStockData {
+  default: StockData | null;
+  tenMin: StockData | null;
+  thirtyMin: StockData | null;
+  oneHour: StockData | null;
 }
 
 export default function StockSearch() {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [searchedStock, setSearchedStock] = useState<string | null>(null);
-  const [stockData, setStockData] = useState<StockData | null>(null);
+  const [allStockData, setAllStockData] = useState<AllStockData>({
+    default: null,
+    tenMin: null,
+    thirtyMin: null,
+    oneHour: null,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,17 +46,59 @@ export default function StockSearch() {
   const fetchStockData = async (ticker: string) => {
     setIsLoading(true);
     setError(null);
+    
     try {
-      const response = await fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to fetch stock data');
+      // Fetch all endpoints in parallel
+      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes] = await Promise.allSettled([
+        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`),
+        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-10m`),
+        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-30m`),
+        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-1h`),
+      ]);
+
+      // Process default data
+      let defaultData = null;
+      if (defaultRes.status === 'fulfilled' && defaultRes.value.ok) {
+        defaultData = await defaultRes.value.json();
       }
-      const data: StockData = await response.json();
-      setStockData(data);
+
+      // Process 10m data
+      let tenMinData = null;
+      if (tenMinRes.status === 'fulfilled' && tenMinRes.value.ok) {
+        tenMinData = await tenMinRes.value.json();
+      }
+
+      // Process 30m data
+      let thirtyMinData = null;
+      if (thirtyMinRes.status === 'fulfilled' && thirtyMinRes.value.ok) {
+        thirtyMinData = await thirtyMinRes.value.json();
+      }
+
+      // Process 1h data
+      let oneHourData = null;
+      if (oneHourRes.status === 'fulfilled' && oneHourRes.value.ok) {
+        oneHourData = await oneHourRes.value.json();
+      }
+
+      // If all failed, throw error
+      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData) {
+        throw new Error('Failed to fetch stock data from all endpoints');
+      }
+
+      setAllStockData({
+        default: defaultData,
+        tenMin: tenMinData,
+        thirtyMin: thirtyMinData,
+        oneHour: oneHourData,
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
-      setStockData(null);
+      setAllStockData({
+        default: null,
+        tenMin: null,
+        thirtyMin: null,
+        oneHour: null,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +115,12 @@ export default function StockSearch() {
   const handleClose = () => {
     setSearchedStock(null);
     setSearchValue('');
-    setStockData(null);
+    setAllStockData({
+      default: null,
+      tenMin: null,
+      thirtyMin: null,
+      oneHour: null,
+    });
     setError(null);
   };
 
@@ -214,7 +274,7 @@ export default function StockSearch() {
       {searchedStock && (
         <StockResultsModal 
           stockSymbol={searchedStock}
-          stockData={stockData}
+          allStockData={allStockData}
           isLoading={isLoading}
           error={error}
           onClose={handleClose} 

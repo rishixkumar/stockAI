@@ -1,6 +1,8 @@
 'use client';
 
-import { TrendingUp, Activity, X, Loader2, AlertCircle, ArrowUp, ArrowDown } from 'lucide-react';
+import { useState } from 'react';
+import { TrendingUp, Activity, X, Loader2, AlertCircle, Clock } from 'lucide-react';
+import CandlestickList from './CandlestickList';
 
 interface CandlestickData {
   timestamp: string;
@@ -17,42 +19,59 @@ interface StockData {
   interval: string;
   candlesticks: CandlestickData[];
   count: number;
+  requested_count?: number;
+}
+
+interface AllStockData {
+  default: StockData | null;
+  tenMin: StockData | null;
+  thirtyMin: StockData | null;
+  oneHour: StockData | null;
 }
 
 interface StockResultsModalProps {
   stockSymbol: string;
-  stockData: StockData | null;
+  allStockData: AllStockData;
   isLoading: boolean;
   error: string | null;
   onClose: () => void;
 }
 
+type TabType = 'quick' | '10m' | '30m' | '1h';
+
 export default function StockResultsModal({ 
   stockSymbol, 
-  stockData, 
+  allStockData, 
   isLoading, 
   error, 
   onClose 
 }: StockResultsModalProps) {
-  
-  const formatTimestamp = (timestamp: string) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+  const [activeTab, setActiveTab] = useState<TabType>('quick');
+
+  // Get the currently displayed stock data based on active tab
+  const getCurrentStockData = (): StockData | null => {
+    switch (activeTab) {
+      case 'quick':
+        return allStockData.default;
+      case '10m':
+        return allStockData.tenMin;
+      case '30m':
+        return allStockData.thirtyMin;
+      case '1h':
+        return allStockData.oneHour;
+      default:
+        return null;
+    }
   };
 
-  const formatVolume = (volume: number) => {
-    if (volume >= 1000000) {
-      return `${(volume / 1000000).toFixed(2)}M`;
-    } else if (volume >= 1000) {
-      return `${(volume / 1000).toFixed(2)}K`;
-    }
-    return volume.toString();
-  };
+  const stockData = getCurrentStockData();
+
+  const tabs = [
+    { id: 'quick' as TabType, label: 'Quick View', subtitle: '10 candles', available: !!allStockData.default },
+    { id: '10m' as TabType, label: '15 Min', subtitle: '100 candles', available: !!allStockData.tenMin },
+    { id: '30m' as TabType, label: '30 Min', subtitle: '100 candles', available: !!allStockData.thirtyMin },
+    { id: '1h' as TabType, label: '1 Hour', subtitle: '100 candles', available: !!allStockData.oneHour },
+  ];
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
@@ -102,11 +121,49 @@ export default function StockResultsModal({
                   <p className="text-2xl font-bold text-stone-900 font-mono tracking-wider">
                     {stockSymbol}
                   </p>
-                  {stockData && (
-                    <p className="text-sm text-stone-600 mt-1">{stockData.company_name}</p>
+                  {(allStockData.default || allStockData.tenMin || allStockData.thirtyMin || allStockData.oneHour) && (
+                    <p className="text-sm text-stone-600 mt-1">
+                      {allStockData.default?.company_name || 
+                       allStockData.tenMin?.company_name || 
+                       allStockData.thirtyMin?.company_name || 
+                       allStockData.oneHour?.company_name}
+                    </p>
                   )}
                 </div>
               </div>
+
+              {/* Tabs */}
+              {!isLoading && !error && (
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      disabled={!tab.available}
+                      className={`
+                        flex-shrink-0 px-4 py-3 rounded-lg transition-all duration-300
+                        ${
+                          activeTab === tab.id
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30'
+                            : tab.available
+                            ? 'bg-white border-2 border-stone-200 text-stone-700 hover:border-amber-300 hover:shadow-md'
+                            : 'bg-stone-100 border-2 border-stone-200 text-stone-400 cursor-not-allowed opacity-50'
+                        }
+                      `}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4" />
+                        <div className="text-left">
+                          <p className="font-semibold text-sm">{tab.label}</p>
+                          <p className={`text-xs ${activeTab === tab.id ? 'text-amber-100' : 'text-stone-500'}`}>
+                            {tab.subtitle}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Loading State */}
               {isLoading && (
@@ -131,75 +188,27 @@ export default function StockResultsModal({
               {!isLoading && !error && stockData && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide">
+                    <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-amber-600" />
                       Candlestick Data ({stockData.interval} intervals)
                     </label>
-                    <span className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded">
-                      {stockData.count} candles
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded">
+                        Showing {stockData.count} candles
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="max-h-[400px] overflow-y-auto space-y-2 pr-2 custom-scrollbar">
-                    {stockData.candlesticks.map((candle, index) => {
-                      const isGreen = candle.close >= candle.open;
-                      const changePercent = ((candle.close - candle.open) / candle.open * 100).toFixed(2);
-                      
-                      return (
-                        <div 
-                          key={index}
-                          className="bg-white border-2 border-stone-200 rounded-lg p-4 hover:border-amber-300 transition-all duration-300 hover:shadow-md"
-                        >
-                          <div className="flex items-start justify-between mb-3">
-                            <div>
-                              <p className="text-xs text-stone-500 font-medium">
-                                {formatTimestamp(candle.timestamp)}
-                              </p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <p className={`text-2xl font-bold ${isGreen ? 'text-green-600' : 'text-red-600'}`}>
-                                  ${candle.close.toFixed(2)}
-                                </p>
-                                <div className={`flex items-center gap-1 text-sm font-semibold ${isGreen ? 'text-green-600' : 'text-red-600'}`}>
-                                  {isGreen ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
-                                  {Math.abs(parseFloat(changePercent))}%
-                                </div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-xs text-stone-500 font-medium mb-1">Volume</p>
-                              <p className="text-sm font-bold text-stone-700">{formatVolume(candle.volume)}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="grid grid-cols-4 gap-2 text-xs">
-                            <div className="bg-stone-50 rounded px-2 py-1.5">
-                              <p className="text-stone-500 font-medium">Open</p>
-                              <p className="font-bold text-stone-900">${candle.open.toFixed(2)}</p>
-                            </div>
-                            <div className="bg-green-50 rounded px-2 py-1.5">
-                              <p className="text-green-700 font-medium">High</p>
-                              <p className="font-bold text-green-900">${candle.high.toFixed(2)}</p>
-                            </div>
-                            <div className="bg-red-50 rounded px-2 py-1.5">
-                              <p className="text-red-700 font-medium">Low</p>
-                              <p className="font-bold text-red-900">${candle.low.toFixed(2)}</p>
-                            </div>
-                            <div className={`${isGreen ? 'bg-green-50' : 'bg-red-50'} rounded px-2 py-1.5`}>
-                              <p className={`${isGreen ? 'text-green-700' : 'text-red-700'} font-medium`}>Close</p>
-                              <p className={`font-bold ${isGreen ? 'text-green-900' : 'text-red-900'}`}>${candle.close.toFixed(2)}</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <CandlestickList candlesticks={stockData.candlesticks} />
                 </div>
               )}
 
-              {/* Ready State (when no data yet) */}
+              {/* No Data State (when tab has no data) */}
               {!isLoading && !error && !stockData && (
-                <div className="flex items-center gap-2 text-sm text-stone-500 bg-amber-50/50 border border-amber-100 rounded-lg px-4 py-3">
-                  <Activity className="w-4 h-4 text-amber-600" />
-                  <span>Ready to fetch market data for this symbol</span>
+                <div className="flex flex-col items-center justify-center py-12 space-y-3">
+                  <AlertCircle className="w-12 h-12 text-stone-400" />
+                  <p className="text-stone-600 font-medium">No data available for this timeframe</p>
+                  <p className="text-sm text-stone-500">Try selecting a different interval</p>
                 </div>
               )}
             </div>
