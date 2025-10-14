@@ -1,22 +1,76 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Search, TrendingUp, BarChart3, Activity } from 'lucide-react';
+import StockResultsModal from './StockResultsModal';
+
+interface CandlestickData {
+  timestamp: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+interface StockData {
+  ticker: string;
+  company_name: string;
+  interval: string;
+  candlesticks: CandlestickData[];
+  count: number;
+}
 
 export default function StockSearch() {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [searchedStock, setSearchedStock] = useState<string | null>(null);
+  const [stockData, setStockData] = useState<StockData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const fetchStockData = async (ticker: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch stock data');
+      }
+      const data: StockData = await response.json();
+      setStockData(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      setStockData(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      console.log('Searching for:', searchValue);
-      // API call will go here
+      setSearchedStock(searchValue.trim());
+      fetchStockData(searchValue.trim());
     }
   };
 
+  const handleClose = () => {
+    setSearchedStock(null);
+    setSearchValue('');
+    setStockData(null);
+    setError(null);
+  };
+
   const popularStocks = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA'];
+
+  const handlePopularStockClick = (stock: string) => {
+    setSearchValue(stock);
+    setSearchedStock(stock);
+    fetchStockData(stock);
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
@@ -138,7 +192,7 @@ export default function StockSearch() {
           {popularStocks.map((stock) => (
             <button
               key={stock}
-              onClick={() => setSearchValue(stock)}
+              onClick={() => handlePopularStockClick(stock)}
               className="
                 px-4 py-2 rounded-lg
                 bg-white/60 backdrop-blur-sm
@@ -155,6 +209,17 @@ export default function StockSearch() {
           ))}
         </div>
       </div>
+
+      {/* Modal Popup Window */}
+      {searchedStock && (
+        <StockResultsModal 
+          stockSymbol={searchedStock}
+          stockData={stockData}
+          isLoading={isLoading}
+          error={error}
+          onClose={handleClose} 
+        />
+      )}
 
       {/* Decorative elements */}
       <div className="absolute top-1/4 right-10 w-72 h-72 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
