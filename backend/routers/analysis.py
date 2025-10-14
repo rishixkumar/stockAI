@@ -52,7 +52,7 @@ async def get_comprehensive_analysis(ticker: str) -> Dict[str, Any]:
                             "published_at": pub_date_str,
                         })
                         
-                        if len(recent_news) >= 10:  # Limit to 10 articles
+                        if len(recent_news) >= 25:  # Limit to 25 articles
                             break
             except:
                 continue
@@ -98,7 +98,7 @@ async def get_sentiment_analysis(ticker: str) -> Dict[str, Any]:
                             "source": content.get('provider', {}).get('displayName', 'Unknown'),
                         })
                         
-                        if len(recent_news) >= 10:
+                        if len(recent_news) >= 25:
                             break
             except:
                 continue

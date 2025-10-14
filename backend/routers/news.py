@@ -17,7 +17,7 @@ router = APIRouter(
 @router.get("/{ticker}/news")
 async def get_stock_news(ticker: str) -> Dict[str, Any]:
     """
-    Fetch the latest 10 news articles for the specified stock ticker from the past 48 hours.
+    Fetch the latest 25 news articles for the specified stock ticker from the past 96 hours.
     Returns news articles with title, summary, publication date, source, thumbnail, and article URL.
     """
     try:
@@ -40,8 +40,8 @@ async def get_stock_news(ticker: str) -> Dict[str, Any]:
                 detail=f"No news found for ticker '{ticker}'. Please verify the stock symbol is correct."
             )
         
-        # Calculate cutoff time (48 hours ago)
-        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=48)
+        # Calculate cutoff time (96 hours ago)
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=96)
         
         # Process and filter news articles
         news_articles: List[Dict[str, Any]] = []
@@ -55,7 +55,7 @@ async def get_stock_news(ticker: str) -> Dict[str, Any]:
                     # Parse ISO format datetime
                     pub_date = datetime.fromisoformat(pub_date_str.replace('Z', '+00:00'))
                     
-                    # Skip articles older than 48 hours
+                    # Skip articles older than 96 hours
                     if pub_date < cutoff_time:
                         continue
                 else:
@@ -89,10 +89,9 @@ async def get_stock_news(ticker: str) -> Dict[str, Any]:
                     "article_url": article_url,
                 })
                 
-                # Stop after collecting 10 articles
-                if len(news_articles) >= 10:
+                # Stop after collecting 25 articles
+                if len(news_articles) >= 25:
                     break
-                    
             except Exception as e:
                 # Skip articles that fail to parse
                 continue
@@ -100,7 +99,7 @@ async def get_stock_news(ticker: str) -> Dict[str, Any]:
         if not news_articles:
             raise HTTPException(
                 status_code=404,
-                detail=f"No recent news found for ticker '{ticker}' in the past 48 hours."
+                detail=f"No recent news found for ticker '{ticker}' in the past 96 hours."
             )
         
         return {
@@ -108,7 +107,7 @@ async def get_stock_news(ticker: str) -> Dict[str, Any]:
             "company_name": company_name,
             "news": news_articles,
             "count": len(news_articles),
-            "time_range": "48 hours"
+            "time_range": "96 hours"
         }
         
     except HTTPException:
