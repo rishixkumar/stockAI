@@ -8,11 +8,15 @@ from typing import Dict, List, Any, Optional
 import statistics
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import re
+from ml.trading_predictor import TradingPredictor
+from ml.decision_engine import TradingDecisionEngine
 
 
 class StockAnalyzer:
     def __init__(self):
         self.sentiment_analyzer = SentimentIntensityAnalyzer()
+        self.trading_predictor = TradingPredictor()
+        self.decision_engine = TradingDecisionEngine()
     
     def aggregate_candlestick_data(self, ticker: str) -> Dict[str, Any]:
         """
@@ -274,7 +278,8 @@ class StockAnalyzer:
     
     def comprehensive_analysis(self, ticker: str, news_articles: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Perform comprehensive analysis combining stock data aggregation and sentiment analysis.
+        Perform comprehensive analysis combining stock data aggregation, sentiment analysis,
+        and ML-based trading predictions.
         """
         try:
             # Aggregate stock data
@@ -289,6 +294,26 @@ class StockAnalyzer:
             # Combine insights
             combined_sentiment = self._combine_sentiments(news_sentiment, stock_sentiment)
             
+            # Generate ML-based trading signals
+            sentiment_data = {
+                "news_sentiment": news_sentiment,
+                "stock_sentiment": stock_sentiment,
+                "combined_sentiment": combined_sentiment
+            }
+            
+            ml_signals = self.trading_predictor.generate_trading_signals(
+                stock_analysis, 
+                sentiment_data
+            )
+            
+            # Generate Buy/Sell/Hold decision
+            trading_decision = self.decision_engine.make_trading_decision(
+                ml_signals,
+                sentiment_data,
+                stock_analysis,
+                stock_analysis['current_price']
+            )
+            
             return {
                 "ticker": ticker.upper(),
                 "analysis_timestamp": datetime.now(timezone.utc).isoformat(),
@@ -296,7 +321,9 @@ class StockAnalyzer:
                 "news_sentiment": news_sentiment,
                 "stock_sentiment": stock_sentiment,
                 "combined_sentiment": combined_sentiment,
-                "recommendations": self._generate_recommendations(stock_analysis, combined_sentiment)
+                "recommendations": self._generate_recommendations(stock_analysis, combined_sentiment),
+                "ml_trading_signals": ml_signals,
+                "trading_decision": trading_decision
             }
             
         except Exception as e:

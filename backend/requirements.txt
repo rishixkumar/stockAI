@@ -6,4 +6,5 @@ typing-extensions>=4.8.0
 yfinance==0.2.48
 pandas==2.2.3
 vaderSentiment==3.3.2
+numpy==1.26.4
 

@@ -1,6 +1,8 @@
 'use client';
 
-import { TrendingUp, TrendingDown, Minus, Target, Lightbulb, BarChart3, Activity, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Target, BarChart3, Activity } from 'lucide-react';
+import TradingDecision from './TradingDecision';
+import MLTradingRecommendations from './MLTradingRecommendations';
 
 interface AnalysisData {
   ticker: string;
@@ -10,6 +12,8 @@ interface AnalysisData {
   stock_sentiment: any;
   combined_sentiment: any;
   recommendations: string[];
+  ml_trading_signals?: any;
+  trading_decision?: any;
 }
 
 interface AnalysisViewProps {
@@ -17,7 +21,7 @@ interface AnalysisViewProps {
 }
 
 export default function AnalysisView({ analysisData }: AnalysisViewProps) {
-  const { stock_analysis, news_sentiment, stock_sentiment, combined_sentiment, recommendations } = analysisData;
+  const { stock_analysis, news_sentiment, stock_sentiment, combined_sentiment, recommendations, ml_trading_signals, trading_decision } = analysisData;
 
   const getSentimentIcon = (sentiment: string) => {
     switch (sentiment.toLowerCase()) {
@@ -45,17 +49,6 @@ export default function AnalysisView({ analysisData }: AnalysisViewProps) {
     }
   };
 
-  const getRecommendationIcon = (recommendation: string) => {
-    if (recommendation.includes('buy') || recommendation.includes('Buy')) {
-      return <CheckCircle className="w-4 h-4 text-green-600" />;
-    } else if (recommendation.includes('sell') || recommendation.includes('short')) {
-      return <XCircle className="w-4 h-4 text-red-600" />;
-    } else if (recommendation.includes('volatility') || recommendation.includes('risk')) {
-      return <AlertTriangle className="w-4 h-4 text-amber-600" />;
-    } else {
-      return <Lightbulb className="w-4 h-4 text-blue-600" />;
-    }
-  };
 
   const formatTimestamp = (timestamp: string) => {
     return new Date(timestamp).toLocaleString('en-US', {
@@ -67,14 +60,24 @@ export default function AnalysisView({ analysisData }: AnalysisViewProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-stone-900">Market Analysis</h2>
+        <h2 className="text-3xl font-bold text-stone-900">Comprehensive Market Analysis</h2>
         <p className="text-sm text-stone-600">
-          Generated {formatTimestamp(analysisData.analysis_timestamp)}
+          ML-Powered Analysis • Generated {formatTimestamp(analysisData.analysis_timestamp)}
         </p>
       </div>
+
+      {/* Trading Decision - Top Priority */}
+      {trading_decision && (
+        <TradingDecision tradingDecision={trading_decision} />
+      )}
+
+      {/* ML Trading Recommendations */}
+      {ml_trading_signals && ml_trading_signals.trading_recommendations && (
+        <MLTradingRecommendations recommendations={ml_trading_signals.trading_recommendations} />
+      )}
 
       {/* Combined Sentiment Overview */}
       <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-6">
@@ -253,22 +256,6 @@ export default function AnalysisView({ analysisData }: AnalysisViewProps) {
         </div>
       </div>
 
-      {/* Trading Recommendations */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6">
-        <h3 className="text-lg font-bold text-stone-900 mb-4 flex items-center gap-2">
-          <Lightbulb className="w-5 h-5 text-blue-600" />
-          Trading Recommendations
-        </h3>
-        
-        <div className="space-y-3">
-          {recommendations.map((recommendation, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-blue-100">
-              {getRecommendationIcon(recommendation)}
-              <p className="text-stone-700 font-medium">{recommendation}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
