@@ -49,7 +49,14 @@ backend/
 ├── requirements.txt     # Python dependencies
 ├── .env.example        # Example environment variables
 ├── .gitignore          # Git ignore rules
-└── README.md           # This file
+├── README.md           # This file
+├── routers/            # API route modules
+│   ├── __init__.py
+│   ├── candlestick.py  # Candlestick data endpoints
+│   └── news.py         # News article endpoints
+└── utils/              # Utility functions
+    ├── __init__.py
+    └── stock_data.py   # Stock data fetching utilities
 ```
 
 ## Development
