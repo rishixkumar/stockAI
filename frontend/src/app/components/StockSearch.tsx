@@ -2,187 +2,28 @@
 
 import { useState, useRef } from 'react';
 import { Search, TrendingUp, BarChart3, Activity } from 'lucide-react';
-import StockResultsModal from './StockResultsModal';
 
-interface CandlestickData {
-  timestamp: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-interface StockData {
-  ticker: string;
-  company_name: string;
-  interval: string;
-  candlesticks: CandlestickData[];
-  count: number;
-  requested_count?: number;
-}
-
-interface NewsArticle {
-  id: string;
-  title: string;
-  summary: string;
-  published_at: string;
-  published_timestamp: number;
-  source: string;
-  thumbnail_url: string | null;
-  article_url: string;
-}
-
-interface NewsData {
-  ticker: string;
-  company_name: string;
-  news: NewsArticle[];
-  count: number;
-  time_range: string;
-}
-
-interface AnalysisData {
-  ticker: string;
-  analysis_timestamp: string;
-  stock_analysis: any;
-  news_sentiment: any;
-  stock_sentiment: any;
-  combined_sentiment: any;
-  recommendations: string[];
-}
-
-interface AllStockData {
-  default: StockData | null;
-  tenMin: StockData | null;
-  thirtyMin: StockData | null;
-  oneHour: StockData | null;
-  news: NewsData | null;
-  analysis: AnalysisData | null;
-}
 
 export default function StockSearch() {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [searchedStock, setSearchedStock] = useState<string | null>(null);
-  const [allStockData, setAllStockData] = useState<AllStockData>({
-    default: null,
-    tenMin: null,
-    thirtyMin: null,
-    oneHour: null,
-    news: null,
-    analysis: null,
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const fetchStockData = async (ticker: string) => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      // Fetch all endpoints in parallel
-      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes, analysisRes] = await Promise.allSettled([
-        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`),
-        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-10m`),
-        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-30m`),
-        fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-1h`),
-        fetch(`http://localhost:8000/api/stock/${ticker}/news`),
-        fetch(`http://localhost:8000/api/stock/${ticker}/analysis`),
-      ]);
-
-      // Process default data
-      let defaultData = null;
-      if (defaultRes.status === 'fulfilled' && defaultRes.value.ok) {
-        defaultData = await defaultRes.value.json();
-      }
-
-      // Process 10m data
-      let tenMinData = null;
-      if (tenMinRes.status === 'fulfilled' && tenMinRes.value.ok) {
-        tenMinData = await tenMinRes.value.json();
-      }
-
-      // Process 30m data
-      let thirtyMinData = null;
-      if (thirtyMinRes.status === 'fulfilled' && thirtyMinRes.value.ok) {
-        thirtyMinData = await thirtyMinRes.value.json();
-      }
-
-      // Process 1h data
-      let oneHourData = null;
-      if (oneHourRes.status === 'fulfilled' && oneHourRes.value.ok) {
-        oneHourData = await oneHourRes.value.json();
-      }
-
-      // Process news data
-      let newsData = null;
-      if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
-        newsData = await newsRes.value.json();
-      }
-
-      // Process analysis data
-      let analysisData = null;
-      if (analysisRes.status === 'fulfilled' && analysisRes.value.ok) {
-        analysisData = await analysisRes.value.json();
-      }
-
-      // If all failed, throw error
-      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData && !analysisData) {
-        throw new Error('Failed to fetch stock data from all endpoints');
-      }
-
-      setAllStockData({
-        default: defaultData,
-        tenMin: tenMinData,
-        thirtyMin: thirtyMinData,
-        oneHour: oneHourData,
-        news: newsData,
-        analysis: analysisData,
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      setAllStockData({
-        default: null,
-        tenMin: null,
-        thirtyMin: null,
-        oneHour: null,
-        news: null,
-        analysis: null,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      setSearchedStock(searchValue.trim());
-      fetchStockData(searchValue.trim());
+      // Navigate to the stock results page instead of showing modal
+      window.location.href = `/stock/${searchValue.trim().toUpperCase()}`;
     }
   };
 
-  const handleClose = () => {
-    setSearchedStock(null);
-    setSearchValue('');
-        setAllStockData({
-          default: null,
-          tenMin: null,
-          thirtyMin: null,
-          oneHour: null,
-          news: null,
-          analysis: null,
-        });
-    setError(null);
-  };
 
   const popularStocks = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'NVDA'];
 
   const handlePopularStockClick = (stock: string) => {
-    setSearchValue(stock);
-    setSearchedStock(stock);
-    fetchStockData(stock);
+    // Navigate directly to the stock results page
+    window.location.href = `/stock/${stock}`;
   };
 
   return (
@@ -323,16 +164,6 @@ export default function StockSearch() {
         </div>
       </div>
 
-      {/* Modal Popup Window */}
-      {searchedStock && (
-        <StockResultsModal 
-          stockSymbol={searchedStock}
-          allStockData={allStockData}
-          isLoading={isLoading}
-          error={error}
-          onClose={handleClose} 
-        />
-      )}
 
       {/* Decorative elements */}
       <div className="absolute top-1/4 right-10 w-72 h-72 bg-amber-200/20 rounded-full blur-3xl pointer-events-none" />
