@@ -41,12 +41,23 @@ interface NewsData {
   time_range: string;
 }
 
+interface AnalysisData {
+  ticker: string;
+  analysis_timestamp: string;
+  stock_analysis: any;
+  news_sentiment: any;
+  stock_sentiment: any;
+  combined_sentiment: any;
+  recommendations: string[];
+}
+
 interface AllStockData {
   default: StockData | null;
   tenMin: StockData | null;
   thirtyMin: StockData | null;
   oneHour: StockData | null;
   news: NewsData | null;
+  analysis: AnalysisData | null;
 }
 
 export default function StockSearch() {
@@ -59,6 +70,7 @@ export default function StockSearch() {
     thirtyMin: null,
     oneHour: null,
     news: null,
+    analysis: null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,12 +82,13 @@ export default function StockSearch() {
     
     try {
       // Fetch all endpoints in parallel
-      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes] = await Promise.allSettled([
+      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes, analysisRes] = await Promise.allSettled([
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-10m`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-30m`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-1h`),
         fetch(`http://localhost:8000/api/stock/${ticker}/news`),
+        fetch(`http://localhost:8000/api/stock/${ticker}/analysis`),
       ]);
 
       // Process default data
@@ -108,8 +121,14 @@ export default function StockSearch() {
         newsData = await newsRes.value.json();
       }
 
+      // Process analysis data
+      let analysisData = null;
+      if (analysisRes.status === 'fulfilled' && analysisRes.value.ok) {
+        analysisData = await analysisRes.value.json();
+      }
+
       // If all failed, throw error
-      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData) {
+      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData && !analysisData) {
         throw new Error('Failed to fetch stock data from all endpoints');
       }
 
@@ -119,6 +138,7 @@ export default function StockSearch() {
         thirtyMin: thirtyMinData,
         oneHour: oneHourData,
         news: newsData,
+        analysis: analysisData,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -128,6 +148,7 @@ export default function StockSearch() {
         thirtyMin: null,
         oneHour: null,
         news: null,
+        analysis: null,
       });
     } finally {
       setIsLoading(false);
@@ -145,13 +166,14 @@ export default function StockSearch() {
   const handleClose = () => {
     setSearchedStock(null);
     setSearchValue('');
-    setAllStockData({
-      default: null,
-      tenMin: null,
-      thirtyMin: null,
-      oneHour: null,
-      news: null,
-    });
+        setAllStockData({
+          default: null,
+          tenMin: null,
+          thirtyMin: null,
+          oneHour: null,
+          news: null,
+          analysis: null,
+        });
     setError(null);
   };
 

@@ -483,6 +483,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-alert.js [app-client] (ecmascript) <export default as AlertCircle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$newspaper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Newspaper$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/newspaper.js [app-client] (ecmascript) <export default as Newspaper>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chart-column.js [app-client] (ecmascript) <export default as BarChart3>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/brain.js [app-client] (ecmascript) <export default as Brain>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$CandlestickList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/CandlestickList.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$NewsList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/components/NewsList.tsx [app-client] (ecmascript)");
 ;
@@ -496,6 +498,7 @@ function StockResultsModal(param) {
     let { stockSymbol, allStockData, isLoading, error, onClose } = param;
     var _allStockData_news, _allStockData_default, _allStockData_tenMin, _allStockData_thirtyMin, _allStockData_oneHour;
     _s();
+    const [activePage, setActivePage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('data');
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('quick');
     // Get the currently displayed stock data based on active tab
     const getCurrentStockData = ()=>{
@@ -513,6 +516,20 @@ function StockResultsModal(param) {
         }
     };
     const stockData = getCurrentStockData();
+    const pages = [
+        {
+            id: 'data',
+            label: 'Market Data',
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__["BarChart3"],
+            available: true
+        },
+        {
+            id: 'analysis',
+            label: 'AI Analysis',
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"],
+            available: !!allStockData.analysis
+        }
+    ];
     const tabs = [
         {
             id: 'quick',
@@ -558,7 +575,7 @@ function StockResultsModal(param) {
                 className: "absolute inset-0 bg-stone-900/40 backdrop-blur-sm"
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                lineNumber: 103,
+                lineNumber: 122,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -571,7 +588,7 @@ function StockResultsModal(param) {
                             className: "absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-400/30 via-orange-400/30 to-amber-400/30 blur-xl"
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                            lineNumber: 112,
+                            lineNumber: 131,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -589,43 +606,43 @@ function StockResultsModal(param) {
                                                         className: "w-5 h-5 text-white"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                        lineNumber: 120,
-                                                        columnNumber: 19
+                                                        lineNumber: 139,
+                                                        columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 119,
-                                                    columnNumber: 17
+                                                    lineNumber: 138,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                             className: "text-white font-bold text-lg",
-                                                            children: "Search Results"
+                                                            children: "Stock Analysis"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 123,
-                                                            columnNumber: 19
+                                                            lineNumber: 142,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             className: "text-amber-50 text-sm",
-                                                            children: "Raw input data"
+                                                            children: stockSymbol
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 124,
-                                                            columnNumber: 19
+                                                            lineNumber: 143,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 122,
-                                                    columnNumber: 17
+                                                    lineNumber: 141,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 118,
-                                            columnNumber: 15
+                                            lineNumber: 137,
+                                            columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: onClose,
@@ -634,19 +651,19 @@ function StockResultsModal(param) {
                                                 className: "w-5 h-5 text-white"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                lineNumber: 131,
-                                                columnNumber: 17
+                                                lineNumber: 150,
+                                                columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 127,
-                                            columnNumber: 15
+                                            lineNumber: 146,
+                                            columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                    lineNumber: 117,
-                                    columnNumber: 13
+                                    lineNumber: 136,
+                                    columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "p-6 space-y-4",
@@ -659,7 +676,7 @@ function StockResultsModal(param) {
                                                     children: "Stock Symbol"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 139,
+                                                    lineNumber: 158,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -670,7 +687,7 @@ function StockResultsModal(param) {
                                                             children: stockSymbol
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 143,
+                                                            lineNumber: 162,
                                                             columnNumber: 19
                                                         }, this),
                                                         (allStockData.default || allStockData.tenMin || allStockData.thirtyMin || allStockData.oneHour) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -678,19 +695,19 @@ function StockResultsModal(param) {
                                                             children: ((_allStockData_default = allStockData.default) === null || _allStockData_default === void 0 ? void 0 : _allStockData_default.company_name) || ((_allStockData_tenMin = allStockData.tenMin) === null || _allStockData_tenMin === void 0 ? void 0 : _allStockData_tenMin.company_name) || ((_allStockData_thirtyMin = allStockData.thirtyMin) === null || _allStockData_thirtyMin === void 0 ? void 0 : _allStockData_thirtyMin.company_name) || ((_allStockData_oneHour = allStockData.oneHour) === null || _allStockData_oneHour === void 0 ? void 0 : _allStockData_oneHour.company_name)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 147,
+                                                            lineNumber: 166,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 142,
+                                                    lineNumber: 161,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 138,
+                                            lineNumber: 157,
                                             columnNumber: 15
                                         }, this),
                                         !isLoading && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -706,7 +723,7 @@ function StockResultsModal(param) {
                                                                 className: "w-4 h-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                lineNumber: 177,
+                                                                lineNumber: 196,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -717,7 +734,7 @@ function StockResultsModal(param) {
                                                                         children: tab.label
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                        lineNumber: 179,
+                                                                        lineNumber: 198,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -725,29 +742,29 @@ function StockResultsModal(param) {
                                                                         children: tab.subtitle
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                        lineNumber: 180,
+                                                                        lineNumber: 199,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                lineNumber: 178,
+                                                                lineNumber: 197,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                        lineNumber: 176,
+                                                        lineNumber: 195,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, tab.id, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 161,
+                                                    lineNumber: 180,
                                                     columnNumber: 21
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 178,
                                             columnNumber: 17
                                         }, this),
                                         isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -757,7 +774,7 @@ function StockResultsModal(param) {
                                                     className: "w-12 h-12 text-amber-600 animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 193,
+                                                    lineNumber: 212,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -765,13 +782,13 @@ function StockResultsModal(param) {
                                                     children: "Fetching candlestick data..."
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 194,
+                                                    lineNumber: 213,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 192,
+                                            lineNumber: 211,
                                             columnNumber: 17
                                         }, this),
                                         error && !isLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -781,7 +798,7 @@ function StockResultsModal(param) {
                                                     className: "w-5 h-5 flex-shrink-0 mt-0.5"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 201,
+                                                    lineNumber: 220,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -791,29 +808,29 @@ function StockResultsModal(param) {
                                                             children: "Error"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 203,
+                                                            lineNumber: 222,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             children: error
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 204,
+                                                            lineNumber: 223,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 202,
+                                                    lineNumber: 221,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 219,
                                             columnNumber: 17
                                         }, this),
-                                        !isLoading && !error && activeTab !== 'news' && stockData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        !isLoading && !error && activePage === 'data' && activeTab !== 'news' && stockData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-3",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -826,8 +843,8 @@ function StockResultsModal(param) {
                                                                     className: "w-4 h-4 text-amber-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                    lineNumber: 214,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 233,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 "Candlestick Data (",
                                                                 stockData.interval,
@@ -835,8 +852,8 @@ function StockResultsModal(param) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 213,
-                                                            columnNumber: 21
+                                                            lineNumber: 232,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center gap-2",
@@ -849,34 +866,34 @@ function StockResultsModal(param) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                lineNumber: 218,
-                                                                columnNumber: 23
+                                                                lineNumber: 237,
+                                                                columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 217,
-                                                            columnNumber: 21
+                                                            lineNumber: 236,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 212,
-                                                    columnNumber: 19
+                                                    lineNumber: 231,
+                                                    columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$CandlestickList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                     candlesticks: stockData.candlesticks
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 224,
-                                                    columnNumber: 19
+                                                    lineNumber: 243,
+                                                    columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 211,
-                                            columnNumber: 17
+                                            lineNumber: 230,
+                                            columnNumber: 21
                                         }, this),
-                                        !isLoading && !error && activeTab === 'news' && allStockData.news && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        !isLoading && !error && activePage === 'data' && activeTab === 'news' && allStockData.news && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-3",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -889,8 +906,8 @@ function StockResultsModal(param) {
                                                                     className: "w-4 h-4 text-amber-600"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                    lineNumber: 233,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 252,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 "Latest News (",
                                                                 allStockData.news.time_range,
@@ -898,8 +915,8 @@ function StockResultsModal(param) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 232,
-                                                            columnNumber: 21
+                                                            lineNumber: 251,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center gap-2",
@@ -911,128 +928,164 @@ function StockResultsModal(param) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                                lineNumber: 237,
-                                                                columnNumber: 23
+                                                                lineNumber: 256,
+                                                                columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                            lineNumber: 236,
-                                                            columnNumber: 21
+                                                            lineNumber: 255,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 231,
-                                                    columnNumber: 19
+                                                    lineNumber: 250,
+                                                    columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$NewsList$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                     news: allStockData.news.news
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 243,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 230,
-                                            columnNumber: 17
-                                        }, this),
-                                        !isLoading && !error && activeTab !== 'news' && !stockData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex flex-col items-center justify-center py-12 space-y-3",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
-                                                    className: "w-12 h-12 text-stone-400"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 250,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-stone-600 font-medium",
-                                                    children: "No data available for this timeframe"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 251,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                    className: "text-sm text-stone-500",
-                                                    children: "Try selecting a different interval"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 252,
-                                                    columnNumber: 19
+                                                    lineNumber: 262,
+                                                    columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
                                             lineNumber: 249,
-                                            columnNumber: 17
+                                            columnNumber: 21
                                         }, this),
-                                        !isLoading && !error && activeTab === 'news' && !allStockData.news && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        !isLoading && !error && activePage === 'data' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                            children: [
+                                                activeTab !== 'news' && !stockData && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex flex-col items-center justify-center py-12 space-y-3",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$alert$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertCircle$3e$__["AlertCircle"], {
+                                                            className: "w-12 h-12 text-stone-400"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 272,
+                                                            columnNumber: 27
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-stone-600 font-medium",
+                                                            children: "No data available for this timeframe"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 273,
+                                                            columnNumber: 27
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-sm text-stone-500",
+                                                            children: "Try selecting a different interval"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 274,
+                                                            columnNumber: 27
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                    lineNumber: 271,
+                                                    columnNumber: 25
+                                                }, this),
+                                                activeTab === 'news' && !allStockData.news && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex flex-col items-center justify-center py-12 space-y-3",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$newspaper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Newspaper$3e$__["Newspaper"], {
+                                                            className: "w-12 h-12 text-stone-400"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 281,
+                                                            columnNumber: 27
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-stone-600 font-medium",
+                                                            children: "No recent news available"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 282,
+                                                            columnNumber: 27
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "text-sm text-stone-500",
+                                                            children: "Check back later for updates"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                            lineNumber: 283,
+                                                            columnNumber: 27
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/components/StockResultsModal.tsx",
+                                                    lineNumber: 280,
+                                                    columnNumber: 25
+                                                }, this)
+                                            ]
+                                        }, void 0, true),
+                                        !isLoading && !error && activePage === 'analysis' && !allStockData.analysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex flex-col items-center justify-center py-12 space-y-3",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$newspaper$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Newspaper$3e$__["Newspaper"], {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"], {
                                                     className: "w-12 h-12 text-stone-400"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 259,
-                                                    columnNumber: 19
+                                                    lineNumber: 292,
+                                                    columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-stone-600 font-medium",
-                                                    children: "No recent news available"
+                                                    children: "Analysis data not available"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 260,
-                                                    columnNumber: 19
+                                                    lineNumber: 293,
+                                                    columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-sm text-stone-500",
-                                                    children: "Check back later for updates"
+                                                    children: "Try refreshing or check back later"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                                    lineNumber: 261,
-                                                    columnNumber: 19
+                                                    lineNumber: 294,
+                                                    columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                            lineNumber: 258,
-                                            columnNumber: 17
+                                            lineNumber: 291,
+                                            columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 155,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                            lineNumber: 115,
+                            lineNumber: 134,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                    lineNumber: 110,
+                    lineNumber: 129,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockResultsModal.tsx",
-                lineNumber: 106,
+                lineNumber: 125,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/components/StockResultsModal.tsx",
-        lineNumber: 98,
+        lineNumber: 117,
         columnNumber: 5
     }, this);
 }
-_s(StockResultsModal, "ImFPGPp//j5fGHSiBLBRO+Jf5x0=");
+_s(StockResultsModal, "9aHy83WLHtQ8xzo+no1lKlM6gug=");
 _c = StockResultsModal;
 var _c;
 __turbopack_context__.k.register(_c, "StockResultsModal");
@@ -1070,7 +1123,8 @@ function StockSearch() {
         tenMin: null,
         thirtyMin: null,
         oneHour: null,
-        news: null
+        news: null,
+        analysis: null
     });
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -1080,12 +1134,13 @@ function StockSearch() {
         setError(null);
         try {
             // Fetch all endpoints in parallel
-            const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes] = await Promise.allSettled([
+            const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes, analysisRes] = await Promise.allSettled([
                 fetch("http://localhost:8000/api/stock/".concat(ticker, "/candlestick")),
                 fetch("http://localhost:8000/api/stock/".concat(ticker, "/candlestick-10m")),
                 fetch("http://localhost:8000/api/stock/".concat(ticker, "/candlestick-30m")),
                 fetch("http://localhost:8000/api/stock/".concat(ticker, "/candlestick-1h")),
-                fetch("http://localhost:8000/api/stock/".concat(ticker, "/news"))
+                fetch("http://localhost:8000/api/stock/".concat(ticker, "/news")),
+                fetch("http://localhost:8000/api/stock/".concat(ticker, "/analysis"))
             ]);
             // Process default data
             let defaultData = null;
@@ -1112,8 +1167,13 @@ function StockSearch() {
             if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
                 newsData = await newsRes.value.json();
             }
+            // Process analysis data
+            let analysisData = null;
+            if (analysisRes.status === 'fulfilled' && analysisRes.value.ok) {
+                analysisData = await analysisRes.value.json();
+            }
             // If all failed, throw error
-            if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData) {
+            if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData && !analysisData) {
                 throw new Error('Failed to fetch stock data from all endpoints');
             }
             setAllStockData({
@@ -1121,7 +1181,8 @@ function StockSearch() {
                 tenMin: tenMinData,
                 thirtyMin: thirtyMinData,
                 oneHour: oneHourData,
-                news: newsData
+                news: newsData,
+                analysis: analysisData
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
@@ -1130,7 +1191,8 @@ function StockSearch() {
                 tenMin: null,
                 thirtyMin: null,
                 oneHour: null,
-                news: null
+                news: null,
+                analysis: null
             });
         } finally{
             setIsLoading(false);
@@ -1151,7 +1213,8 @@ function StockSearch() {
             tenMin: null,
             thirtyMin: null,
             oneHour: null,
-            news: null
+            news: null,
+            analysis: null
         });
         setError(null);
     };
@@ -1181,7 +1244,7 @@ function StockSearch() {
                                 className: "w-4 h-4 text-amber-600"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 171,
+                                lineNumber: 193,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1189,13 +1252,13 @@ function StockSearch() {
                                 children: "Real-time market intelligence"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 172,
+                                lineNumber: 194,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                        lineNumber: 170,
+                        lineNumber: 192,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -1206,12 +1269,12 @@ function StockSearch() {
                                 children: "Discover Stock"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 178,
+                                lineNumber: 200,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 181,
+                                lineNumber: 203,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1219,13 +1282,13 @@ function StockSearch() {
                                 children: "Insights"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 182,
+                                lineNumber: 204,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                        lineNumber: 177,
+                        lineNumber: 199,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1233,13 +1296,13 @@ function StockSearch() {
                         children: "Search any stock symbol to get comprehensive market data, analysis, and insights in real-time."
                     }, void 0, false, {
                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                        lineNumber: 187,
+                        lineNumber: 209,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 169,
+                lineNumber: 191,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1252,7 +1315,7 @@ function StockSearch() {
                             className: "\n              absolute -inset-1 rounded-2xl bg-gradient-to-r from-amber-400/20 via-orange-400/20 to-amber-400/20 \n              blur-xl transition-opacity duration-500\n              ".concat(isFocused ? 'opacity-100' : 'opacity-0', "\n            ")
                         }, void 0, false, {
                             fileName: "[project]/src/app/components/StockSearch.tsx",
-                            lineNumber: 202,
+                            lineNumber: 224,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1265,12 +1328,12 @@ function StockSearch() {
                                         strokeWidth: 2.5
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                                        lineNumber: 232,
+                                        lineNumber: 254,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/StockSearch.tsx",
-                                    lineNumber: 226,
+                                    lineNumber: 248,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1285,7 +1348,7 @@ function StockSearch() {
                                     maxLength: 10
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/components/StockSearch.tsx",
-                                    lineNumber: 236,
+                                    lineNumber: 258,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1298,30 +1361,30 @@ function StockSearch() {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/components/StockSearch.tsx",
-                                            lineNumber: 269,
+                                            lineNumber: 291,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/components/StockSearch.tsx",
-                                    lineNumber: 254,
+                                    lineNumber: 276,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/components/StockSearch.tsx",
-                            lineNumber: 211,
+                            lineNumber: 233,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/components/StockSearch.tsx",
-                    lineNumber: 194,
+                    lineNumber: 216,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 193,
+                lineNumber: 215,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1334,7 +1397,7 @@ function StockSearch() {
                                 className: "w-4 h-4"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 278,
+                                lineNumber: 300,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1342,13 +1405,13 @@ function StockSearch() {
                                 children: "Popular stocks"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 279,
+                                lineNumber: 301,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                        lineNumber: 277,
+                        lineNumber: 299,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1359,18 +1422,18 @@ function StockSearch() {
                                 children: stock
                             }, stock, false, {
                                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                                lineNumber: 284,
+                                lineNumber: 306,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/components/StockSearch.tsx",
-                        lineNumber: 282,
+                        lineNumber: 304,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 276,
+                lineNumber: 298,
                 columnNumber: 7
             }, this),
             searchedStock && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$components$2f$StockResultsModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1381,31 +1444,31 @@ function StockSearch() {
                 onClose: handleClose
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 306,
+                lineNumber: 328,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute top-1/4 right-10 w-72 h-72 bg-amber-200/20 rounded-full blur-3xl pointer-events-none"
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 316,
+                lineNumber: 338,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute bottom-1/4 left-10 w-96 h-96 bg-orange-200/20 rounded-full blur-3xl pointer-events-none"
             }, void 0, false, {
                 fileName: "[project]/src/app/components/StockSearch.tsx",
-                lineNumber: 317,
+                lineNumber: 339,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/components/StockSearch.tsx",
-        lineNumber: 167,
+        lineNumber: 189,
         columnNumber: 5
     }, this);
 }
-_s(StockSearch, "IPErs7ZZt7oIBeZNXFErfumK4/s=");
+_s(StockSearch, "W0c+GCQDPCgn0JrTObCpkY0Fgec=");
 _c = StockSearch;
 var _c;
 __turbopack_context__.k.register(_c, "StockSearch");

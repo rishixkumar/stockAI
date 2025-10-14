@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { TrendingUp, Activity, X, Loader2, AlertCircle, Clock, Newspaper } from 'lucide-react';
+import { TrendingUp, Activity, X, Loader2, AlertCircle, Clock, Newspaper, BarChart3, Brain } from 'lucide-react';
 import CandlestickList from './CandlestickList';
 import NewsList from './NewsList';
+import AnalysisView from './AnalysisView';
 
 interface CandlestickData {
   timestamp: string;
@@ -42,12 +43,23 @@ interface NewsData {
   time_range: string;
 }
 
+interface AnalysisData {
+  ticker: string;
+  analysis_timestamp: string;
+  stock_analysis: any;
+  news_sentiment: any;
+  stock_sentiment: any;
+  combined_sentiment: any;
+  recommendations: string[];
+}
+
 interface AllStockData {
   default: StockData | null;
   tenMin: StockData | null;
   thirtyMin: StockData | null;
   oneHour: StockData | null;
   news: NewsData | null;
+  analysis: AnalysisData | null;
 }
 
 interface StockResultsModalProps {
@@ -58,15 +70,17 @@ interface StockResultsModalProps {
   onClose: () => void;
 }
 
+type PageType = 'data' | 'analysis';
 type TabType = 'quick' | '10m' | '30m' | '1h' | 'news';
 
-export default function StockResultsModal({ 
-  stockSymbol, 
-  allStockData, 
-  isLoading, 
-  error, 
-  onClose 
+export default function StockResultsModal({
+  stockSymbol,
+  allStockData,
+  isLoading,
+  error,
+  onClose
 }: StockResultsModalProps) {
+  const [activePage, setActivePage] = useState<PageType>('data');
   const [activeTab, setActiveTab] = useState<TabType>('quick');
 
   // Get the currently displayed stock data based on active tab
@@ -87,13 +101,18 @@ export default function StockResultsModal({
 
   const stockData = getCurrentStockData();
 
-  const tabs = [
-    { id: 'quick' as TabType, label: 'Quick View', subtitle: '10 candles', available: !!allStockData.default, icon: Clock },
-    { id: '10m' as TabType, label: '15 Min', subtitle: '100 candles', available: !!allStockData.tenMin, icon: Clock },
-    { id: '30m' as TabType, label: '30 Min', subtitle: '100 candles', available: !!allStockData.thirtyMin, icon: Clock },
-    { id: '1h' as TabType, label: '1 Hour', subtitle: '100 candles', available: !!allStockData.oneHour, icon: Clock },
-    { id: 'news' as TabType, label: 'News', subtitle: `${allStockData.news?.count || 0} articles`, available: !!allStockData.news, icon: Newspaper },
-  ];
+      const pages = [
+        { id: 'data' as PageType, label: 'Market Data', icon: BarChart3, available: true },
+        { id: 'analysis' as PageType, label: 'AI Analysis', icon: Brain, available: !!allStockData.analysis },
+      ];
+
+      const tabs = [
+        { id: 'quick' as TabType, label: 'Quick View', subtitle: '10 candles', available: !!allStockData.default, icon: Clock },
+        { id: '10m' as TabType, label: '15 Min', subtitle: '100 candles', available: !!allStockData.tenMin, icon: Clock },
+        { id: '30m' as TabType, label: '30 Min', subtitle: '100 candles', available: !!allStockData.thirtyMin, icon: Clock },
+        { id: '1h' as TabType, label: '1 Hour', subtitle: '100 candles', available: !!allStockData.oneHour, icon: Clock },
+        { id: 'news' as TabType, label: 'News', subtitle: `${allStockData.news?.count || 0} articles`, available: !!allStockData.news, icon: Newspaper },
+      ];
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
@@ -113,101 +132,120 @@ export default function StockResultsModal({
           
           {/* Results card */}
           <div className="relative bg-white rounded-2xl border-2 border-amber-200 shadow-2xl shadow-amber-900/50 overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-white" />
+                {/* Header */}
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <TrendingUp className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-bold text-lg">Stock Analysis</h3>
+                      <p className="text-amber-50 text-sm">{stockSymbol}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={onClose}
+                    className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:bg-white/30 hover:scale-110 active:scale-95"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
                 </div>
-                <div>
-                  <h3 className="text-white font-bold text-lg">Search Results</h3>
-                  <p className="text-amber-50 text-sm">Raw input data</p>
-                </div>
-              </div>
-              <button
-                onClick={onClose}
-                className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:bg-white/30 hover:scale-110 active:scale-95"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
 
             {/* Content */}
             <div className="p-6 space-y-4">
-              {/* Stock Symbol */}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide">
-                  Stock Symbol
-                </label>
-                <div className="bg-stone-50 border-2 border-stone-200 rounded-xl px-6 py-4">
-                  <p className="text-2xl font-bold text-stone-900 font-mono tracking-wider">
-                    {stockSymbol}
-                  </p>
-                  {(allStockData.default || allStockData.tenMin || allStockData.thirtyMin || allStockData.oneHour) && (
-                    <p className="text-sm text-stone-600 mt-1">
-                      {allStockData.default?.company_name || 
-                       allStockData.tenMin?.company_name || 
-                       allStockData.thirtyMin?.company_name || 
-                       allStockData.oneHour?.company_name}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Tabs */}
+              {/* Page Navigation */}
               {!isLoading && !error && (
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                  {tabs.map((tab) => (
+                <div className="flex gap-2 mb-4">
+                  {pages.map((page) => (
                     <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      disabled={!tab.available}
+                      key={page.id}
+                      onClick={() => setActivePage(page.id)}
+                      disabled={!page.available}
                       className={`
-                        flex-shrink-0 px-4 py-3 rounded-lg transition-all duration-300
+                        flex-1 px-4 py-3 rounded-lg transition-all duration-300
+                        flex items-center justify-center gap-2
                         ${
-                          activeTab === tab.id
+                          activePage === page.id
                             ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30'
-                            : tab.available
+                            : page.available
                             ? 'bg-white border-2 border-stone-200 text-stone-700 hover:border-amber-300 hover:shadow-md'
                             : 'bg-stone-100 border-2 border-stone-200 text-stone-400 cursor-not-allowed opacity-50'
                         }
                       `}
                     >
-                      <div className="flex items-center gap-2">
-                        <tab.icon className="w-4 h-4" />
-                        <div className="text-left">
-                          <p className="font-semibold text-sm">{tab.label}</p>
-                          <p className={`text-xs ${activeTab === tab.id ? 'text-amber-100' : 'text-stone-500'}`}>
-                            {tab.subtitle}
-                          </p>
-                        </div>
-                      </div>
+                      <page.icon className="w-5 h-5" />
+                      <span className="font-semibold">{page.label}</span>
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* Loading State */}
-              {isLoading && (
-                <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                  <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
-                  <p className="text-stone-600 font-medium">Fetching candlestick data...</p>
-                </div>
-              )}
-
-              {/* Error State */}
-              {error && !isLoading && (
-                <div className="flex items-start gap-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
-                  <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold">Error</p>
-                    <p>{error}</p>
+              {/* Data Page Content */}
+              {activePage === 'data' && (
+                <>
+                  {/* Stock Symbol */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide">
+                      Stock Symbol
+                    </label>
+                    <div className="bg-stone-50 border-2 border-stone-200 rounded-xl px-6 py-4">
+                      <p className="text-2xl font-bold text-stone-900 font-mono tracking-wider">
+                        {stockSymbol}
+                      </p>
+                      {(allStockData.default || allStockData.tenMin || allStockData.thirtyMin || allStockData.oneHour || allStockData.news) && (
+                        <p className="text-sm text-stone-600 mt-1">
+                          {allStockData.default?.company_name || 
+                           allStockData.tenMin?.company_name || 
+                           allStockData.thirtyMin?.company_name || 
+                           allStockData.oneHour?.company_name ||
+                           allStockData.news?.company_name}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
+
+                  {/* Tabs */}
+                  {!isLoading && !error && (
+                    <div className="flex gap-2 overflow-x-auto pb-2">
+                      {tabs.map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          disabled={!tab.available}
+                          className={`
+                            flex-shrink-0 px-4 py-3 rounded-lg transition-all duration-300
+                            ${
+                              activeTab === tab.id
+                                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30'
+                                : tab.available
+                                ? 'bg-white border-2 border-stone-200 text-stone-700 hover:border-amber-300 hover:shadow-md'
+                                : 'bg-stone-100 border-2 border-stone-200 text-stone-400 cursor-not-allowed opacity-50'
+                            }
+                          `}
+                        >
+                          <div className="flex items-center gap-2">
+                            <tab.icon className="w-4 h-4" />
+                            <div className="text-left">
+                              <p className="font-semibold text-sm">{tab.label}</p>
+                              <p className={`text-xs ${activeTab === tab.id ? 'text-amber-100' : 'text-stone-500'}`}>
+                                {tab.subtitle}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
 
-              {/* Candlestick Data */}
-              {!isLoading && !error && activeTab !== 'news' && stockData && (
+              {/* Analysis Page Content */}
+              {activePage === 'analysis' && allStockData.analysis && (
+                <AnalysisView analysisData={allStockData.analysis} />
+              )}
+
+              {/* Data Page Content - Candlestick Data */}
+              {!isLoading && !error && activePage === 'data' && activeTab !== 'news' && stockData && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-2">
@@ -225,8 +263,8 @@ export default function StockResultsModal({
                 </div>
               )}
 
-              {/* News Data */}
-              {!isLoading && !error && activeTab === 'news' && allStockData.news && (
+              {/* Data Page Content - News Data */}
+              {!isLoading && !error && activePage === 'data' && activeTab === 'news' && allStockData.news && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-2">
@@ -244,21 +282,54 @@ export default function StockResultsModal({
                 </div>
               )}
 
-              {/* No Data State (when tab has no data) */}
-              {!isLoading && !error && activeTab !== 'news' && !stockData && (
+              {/* Data Page Content - No Data States */}
+              {!isLoading && !error && activePage === 'data' && (
+                <>
+                  {/* No Data State (when tab has no data) */}
+                  {activeTab !== 'news' && !stockData && (
+                    <div className="flex flex-col items-center justify-center py-12 space-y-3">
+                      <AlertCircle className="w-12 h-12 text-stone-400" />
+                      <p className="text-stone-600 font-medium">No data available for this timeframe</p>
+                      <p className="text-sm text-stone-500">Try selecting a different interval</p>
+                    </div>
+                  )}
+
+                  {/* No News State */}
+                  {activeTab === 'news' && !allStockData.news && (
+                    <div className="flex flex-col items-center justify-center py-12 space-y-3">
+                      <Newspaper className="w-12 h-12 text-stone-400" />
+                      <p className="text-stone-600 font-medium">No recent news available</p>
+                      <p className="text-sm text-stone-500">Check back later for updates</p>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Analysis Page Content - No Analysis Data */}
+              {!isLoading && !error && activePage === 'analysis' && !allStockData.analysis && (
                 <div className="flex flex-col items-center justify-center py-12 space-y-3">
-                  <AlertCircle className="w-12 h-12 text-stone-400" />
-                  <p className="text-stone-600 font-medium">No data available for this timeframe</p>
-                  <p className="text-sm text-stone-500">Try selecting a different interval</p>
+                  <Brain className="w-12 h-12 text-stone-400" />
+                  <p className="text-stone-600 font-medium">Analysis data not available</p>
+                  <p className="text-sm text-stone-500">Try refreshing or check back later</p>
                 </div>
               )}
 
-              {/* No News State */}
-              {!isLoading && !error && activeTab === 'news' && !allStockData.news && (
-                <div className="flex flex-col items-center justify-center py-12 space-y-3">
-                  <Newspaper className="w-12 h-12 text-stone-400" />
-                  <p className="text-stone-600 font-medium">No recent news available</p>
-                  <p className="text-sm text-stone-500">Check back later for updates</p>
+              {/* Loading State */}
+              {isLoading && (
+                <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                  <Loader2 className="w-12 h-12 text-amber-600 animate-spin" />
+                  <p className="text-stone-600 font-medium">Fetching market data...</p>
+                </div>
+              )}
+
+              {/* Error State */}
+              {error && !isLoading && (
+                <div className="flex items-start gap-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold">Error</p>
+                    <p>{error}</p>
+                  </div>
                 </div>
               )}
             </div>

@@ -4,7 +4,7 @@ Main FastAPI application for Stock Search API.
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import candlestick, news
+from routers import candlestick, news, analysis
 
 app = FastAPI(
     title="Stock Search API",
@@ -24,6 +24,7 @@ app.add_middleware(
 # Include routers
 app.include_router(candlestick.router)
 app.include_router(news.router)
+app.include_router(analysis.router)
 
 
 @app.get("/")
