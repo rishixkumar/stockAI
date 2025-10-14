@@ -22,11 +22,31 @@ interface StockData {
   requested_count?: number;
 }
 
+interface NewsArticle {
+  id: string;
+  title: string;
+  summary: string;
+  published_at: string;
+  published_timestamp: number;
+  source: string;
+  thumbnail_url: string | null;
+  article_url: string;
+}
+
+interface NewsData {
+  ticker: string;
+  company_name: string;
+  news: NewsArticle[];
+  count: number;
+  time_range: string;
+}
+
 interface AllStockData {
   default: StockData | null;
   tenMin: StockData | null;
   thirtyMin: StockData | null;
   oneHour: StockData | null;
+  news: NewsData | null;
 }
 
 export default function StockSearch() {
@@ -38,6 +58,7 @@ export default function StockSearch() {
     tenMin: null,
     thirtyMin: null,
     oneHour: null,
+    news: null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,11 +70,12 @@ export default function StockSearch() {
     
     try {
       // Fetch all endpoints in parallel
-      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes] = await Promise.allSettled([
+      const [defaultRes, tenMinRes, thirtyMinRes, oneHourRes, newsRes] = await Promise.allSettled([
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-10m`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-30m`),
         fetch(`http://localhost:8000/api/stock/${ticker}/candlestick-1h`),
+        fetch(`http://localhost:8000/api/stock/${ticker}/news`),
       ]);
 
       // Process default data
@@ -80,8 +102,14 @@ export default function StockSearch() {
         oneHourData = await oneHourRes.value.json();
       }
 
+      // Process news data
+      let newsData = null;
+      if (newsRes.status === 'fulfilled' && newsRes.value.ok) {
+        newsData = await newsRes.value.json();
+      }
+
       // If all failed, throw error
-      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData) {
+      if (!defaultData && !tenMinData && !thirtyMinData && !oneHourData && !newsData) {
         throw new Error('Failed to fetch stock data from all endpoints');
       }
 
@@ -90,6 +118,7 @@ export default function StockSearch() {
         tenMin: tenMinData,
         thirtyMin: thirtyMinData,
         oneHour: oneHourData,
+        news: newsData,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -98,6 +127,7 @@ export default function StockSearch() {
         tenMin: null,
         thirtyMin: null,
         oneHour: null,
+        news: null,
       });
     } finally {
       setIsLoading(false);
@@ -120,6 +150,7 @@ export default function StockSearch() {
       tenMin: null,
       thirtyMin: null,
       oneHour: null,
+      news: null,
     });
     setError(null);
   };

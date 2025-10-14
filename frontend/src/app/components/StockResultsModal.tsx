@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { TrendingUp, Activity, X, Loader2, AlertCircle, Clock } from 'lucide-react';
+import { TrendingUp, Activity, X, Loader2, AlertCircle, Clock, Newspaper } from 'lucide-react';
 import CandlestickList from './CandlestickList';
+import NewsList from './NewsList';
 
 interface CandlestickData {
   timestamp: string;
@@ -22,11 +23,31 @@ interface StockData {
   requested_count?: number;
 }
 
+interface NewsArticle {
+  id: string;
+  title: string;
+  summary: string;
+  published_at: string;
+  published_timestamp: number;
+  source: string;
+  thumbnail_url: string | null;
+  article_url: string;
+}
+
+interface NewsData {
+  ticker: string;
+  company_name: string;
+  news: NewsArticle[];
+  count: number;
+  time_range: string;
+}
+
 interface AllStockData {
   default: StockData | null;
   tenMin: StockData | null;
   thirtyMin: StockData | null;
   oneHour: StockData | null;
+  news: NewsData | null;
 }
 
 interface StockResultsModalProps {
@@ -37,7 +58,7 @@ interface StockResultsModalProps {
   onClose: () => void;
 }
 
-type TabType = 'quick' | '10m' | '30m' | '1h';
+type TabType = 'quick' | '10m' | '30m' | '1h' | 'news';
 
 export default function StockResultsModal({ 
   stockSymbol, 
@@ -67,10 +88,11 @@ export default function StockResultsModal({
   const stockData = getCurrentStockData();
 
   const tabs = [
-    { id: 'quick' as TabType, label: 'Quick View', subtitle: '10 candles', available: !!allStockData.default },
-    { id: '10m' as TabType, label: '15 Min', subtitle: '100 candles', available: !!allStockData.tenMin },
-    { id: '30m' as TabType, label: '30 Min', subtitle: '100 candles', available: !!allStockData.thirtyMin },
-    { id: '1h' as TabType, label: '1 Hour', subtitle: '100 candles', available: !!allStockData.oneHour },
+    { id: 'quick' as TabType, label: 'Quick View', subtitle: '10 candles', available: !!allStockData.default, icon: Clock },
+    { id: '10m' as TabType, label: '15 Min', subtitle: '100 candles', available: !!allStockData.tenMin, icon: Clock },
+    { id: '30m' as TabType, label: '30 Min', subtitle: '100 candles', available: !!allStockData.thirtyMin, icon: Clock },
+    { id: '1h' as TabType, label: '1 Hour', subtitle: '100 candles', available: !!allStockData.oneHour, icon: Clock },
+    { id: 'news' as TabType, label: 'News', subtitle: `${allStockData.news?.count || 0} articles`, available: !!allStockData.news, icon: Newspaper },
   ];
   return (
     <div 
@@ -152,7 +174,7 @@ export default function StockResultsModal({
                       `}
                     >
                       <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4" />
+                        <tab.icon className="w-4 h-4" />
                         <div className="text-left">
                           <p className="font-semibold text-sm">{tab.label}</p>
                           <p className={`text-xs ${activeTab === tab.id ? 'text-amber-100' : 'text-stone-500'}`}>
@@ -185,7 +207,7 @@ export default function StockResultsModal({
               )}
 
               {/* Candlestick Data */}
-              {!isLoading && !error && stockData && (
+              {!isLoading && !error && activeTab !== 'news' && stockData && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-2">
@@ -203,12 +225,40 @@ export default function StockResultsModal({
                 </div>
               )}
 
+              {/* News Data */}
+              {!isLoading && !error && activeTab === 'news' && allStockData.news && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold text-stone-600 uppercase tracking-wide flex items-center gap-2">
+                      <Newspaper className="w-4 h-4 text-amber-600" />
+                      Latest News ({allStockData.news.time_range})
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-stone-500 bg-stone-100 px-2 py-1 rounded">
+                        {allStockData.news.count} articles
+                      </span>
+                    </div>
+                  </div>
+
+                  <NewsList news={allStockData.news.news} />
+                </div>
+              )}
+
               {/* No Data State (when tab has no data) */}
-              {!isLoading && !error && !stockData && (
+              {!isLoading && !error && activeTab !== 'news' && !stockData && (
                 <div className="flex flex-col items-center justify-center py-12 space-y-3">
                   <AlertCircle className="w-12 h-12 text-stone-400" />
                   <p className="text-stone-600 font-medium">No data available for this timeframe</p>
                   <p className="text-sm text-stone-500">Try selecting a different interval</p>
+                </div>
+              )}
+
+              {/* No News State */}
+              {!isLoading && !error && activeTab === 'news' && !allStockData.news && (
+                <div className="flex flex-col items-center justify-center py-12 space-y-3">
+                  <Newspaper className="w-12 h-12 text-stone-400" />
+                  <p className="text-stone-600 font-medium">No recent news available</p>
+                  <p className="text-sm text-stone-500">Check back later for updates</p>
                 </div>
               )}
             </div>
